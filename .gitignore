@@ -17,8 +17,5 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
-# Базы данных, если не хранятся в git
-*.sqlite3
-
 # VS Code (если используешь)
 .vscode/
