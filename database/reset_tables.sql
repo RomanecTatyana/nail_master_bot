@@ -1,0 +1,7 @@
+DROP TABLE IF EXISTS reviews;
+DROP TABLE IF EXISTS client_notes;
+DROP TABLE IF EXISTS appointments;
+DROP TABLE IF EXISTS blocked_time;
+DROP TABLE IF EXISTS clients;
+DROP TABLE IF EXISTS services;
+DROP TABLE IF EXISTS masters;
