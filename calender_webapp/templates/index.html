@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Календар запису</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Календар запису</h1>
+        <div id="calendar">
+            <div class="month">
+                <button type="button" class="prev">&lt;</button>
+                <div class="month_name">Травень</div>
+                <button type="button" class="next">&gt;</button>
+            </div>
+            <div class="dates">
+                <div class="days">
+                    <ul>
+                        <li>Пн</li>
+                        <li>Вт</li>
+                        <li>Ср</li>
+                        <li>Чт</li>
+                        <li>Пт</li>
+                        <li>Сб</li>
+                        <li>Нд</li>
+                    </ul>
+                </div>
+                <div class="data"></div>
+                <div id="time-slots"></div>
+                <button id="confirm-btn" class="confirm-btn" style="display: none;">Підтвердити</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

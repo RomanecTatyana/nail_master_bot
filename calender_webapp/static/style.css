@@ -1,0 +1,144 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    padding: 20px;
+}
+
+.container {
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#calendar {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.month {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.month_name {
+    flex-grow: 1;
+    text-align: center;
+    border-radius: 5px;
+    background-color: hsl(43, 85%, 61%);
+    font-weight: bold;
+    font-size: 1.2rem;
+    padding: 8px;
+}
+
+.prev, .next {
+    background-color: #ddd;
+    border: none;
+    padding: 5px 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.prev:hover, .next:hover {
+    background-color: #f7dcdc;
+}
+
+.days ul {
+    display: flex;
+    justify-content: space-between;
+    list-style: none;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.data {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.data button {
+    padding: 10px;
+    background-color: hsl(43, 85%, 61%);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.data button:hover {
+    background-color: #ccc;
+}
+
+.data button:disabled {
+    background-color: #eee;
+    color: #aaa;
+    cursor: not-allowed;
+}
+
+button.busy {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+}
+
+.time-slots {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    gap: 10px;
+    justify-content: flex-start;
+}
+
+.time-slot-btn {
+    flex: 0 0 calc(20% - 10px);
+    padding: 10px 0;
+    font-size: 1rem;
+    cursor: pointer;
+    border: 1px solid #333;
+    border-radius: 5px;
+    background-color: hsl(43, 85%, 61%);
+    transition: background-color 0.2s ease;
+    text-align: center;
+}
+
+.time-slot-btn:hover {
+    background-color: #f0c36d;
+}
+
+.time-slot-btn.active {
+    background-color: #d18d28;
+    color: white;
+    border-color: #0056b3;
+}
+
+.confirm-btn {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.confirm-btn:hover {
+    background-color: #218838;
+}
