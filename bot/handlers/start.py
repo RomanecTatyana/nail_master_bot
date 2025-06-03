@@ -23,6 +23,6 @@ async def start_handler(message: types.Message):
                 "INSERT INTO clients (telegram_id, full_name, phone) VALUES ($1, $2, $3)",
                 telegram_id, full_name, phone
             )
-            await message.answer("Вітаємо! Ваш профіль створено.", reply_markup=menu.main_menu)
+            await message.answer("Вітаємо! Ваш профіль створено.", reply_markup=menu.main_menu_with_cancel)
         else:
-            await message.answer(f"З поверненням, {full_name}!", reply_markup=menu.main_menu)
+            await message.answer(f"З поверненням, {full_name}!", reply_markup=menu.main_menu_with_cancel)

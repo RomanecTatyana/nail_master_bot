@@ -8,12 +8,22 @@ from aiogram import Bot
 import asyncio
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from bot.bot_utils import send_message_to_user
-print(sys.path)
+import threading
 
 load_dotenv()
 app = Flask(__name__)
 
+def send_async_message(chat_id, service_name, time, date):
+    try:
+        print("Запуск отправки сообщения...")
+        asyncio.run(send_message_to_user(chat_id, service_name, time, date))
+        print("Сообщение отправлено!")
+    except Exception as e:
+        print(f"Ошибка при отправке сообщения: {e}")
 
+    
+    
+    
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -38,7 +48,8 @@ def get_busy_dates(year, month, duration_minutes):
         JOIN masters m ON a.master_id = m.id
         WHERE EXTRACT(YEAR FROM a.appointment_date) = %s
           AND EXTRACT(MONTH FROM a.appointment_date) = %s
-    """, (year, month))
+          AND a.stat = %s
+    """, (year, month, "active"))
 
     schedule_by_date = defaultdict(list)
     work_hours_by_date = {}
@@ -131,7 +142,8 @@ def free_slots():
             SELECT start_time, end_time
             FROM appointments
             WHERE appointment_date::date = %s
-        """, (date_obj,))
+            AND stat = %s
+        """, (date_obj, "active"))
         busy_appointments = cur.fetchall()
 
         busy_intervals = []
@@ -180,21 +192,20 @@ def submit_appointment():
         data = request.get_json()
         date = data.get("date")
         time = data.get("time")
-        seviceId = data.get("seviceI")
-        seviceName = data.get("serviceN")
-        clientId = data.get("user")
+        service_id = data.get("serviceI")  # было: seviceI
+        service_name = data.get("serviceN")
+        client_id = data.get("user")
         duration = data.get("duration")
-        chatID = data.get("chatID")
-        # Преобразуем строку во время
+        chat_id = data.get("chatID")
+
         start_time = datetime.strptime(time, "%H:%M")
-        # Добавляем продолжительность
         end_time = start_time + timedelta(minutes=duration)
-        # Получаем строку формата HH:MM
         end_time_str = end_time.strftime("%H:%M")
-        print(time, start_time, end_time, end_time_str, chatID)
-        # Тут логика сохранения записи в базу или другая обработка
-        # Например, просто выводим в лог:
-        print(f"Получена заявка на запись: {clientId}   {seviceName}{date} {time}  {duration}")
+
+
+
+        print(f"Получена заявка: client={client_id}, service={service_name}, date={date}, time={time}, duration={duration}")
+
         conn = psycopg2.connect(
             user=os.getenv("DB_USER"),
             password=os.getenv("DB_PASSWORD"),
@@ -202,22 +213,49 @@ def submit_appointment():
             host=os.getenv("DB_HOST"),
             port=os.getenv("DB_PORT")
         )
+        
         cur = conn.cursor()
-        
-        appoint = """
-        INSERT INTO appointments
-        (client_id, service_id, master_id, appointment_date, start_time, end_time, stat)
-        VALUES (%s, %s, %s, %s, %s, %s, %s)"""
-        
-        cur.execute(appoint, (clientId, seviceId, 1, date, time, end_time_str, "active"))
+        # Получаем название услуги по ID
+        cur.execute("SELECT service_name FROM services WHERE id = %s", (service_id,))
+        row = cur.fetchone()
+        if row:
+            service_name = row[0]
+        else:
+            service_name = "обрана послуга"
+        cur.execute("""
+            SELECT COUNT(*) FROM appointments
+            WHERE appointment_date = %s
+            AND start_time = %s
+            AND stat = 'active'
+        """, (date, time))
+
+        conflict_count = cur.fetchone()[0]
+
+        if conflict_count > 0:
+            cur.close()
+            conn.close()
+            return jsonify({"status": "error", "message": "Цей час вже зайнятий"}), 409
+
+# ✅ Нет конфликта — делаем запись
+        query = """
+    INSERT INTO appointments
+    (client_id, service_id, master_id, appointment_date, start_time, end_time, stat)
+    VALUES (%s, %s, %s, %s, %s, %s, %s)
+"""
+        cur.execute(query, (client_id, service_id, 1, date, time, end_time_str, "active"))
         conn.commit()
         cur.close()
         conn.close()
-        # Можно вернуть подтверждение клиенту
-        asyncio.run(send_message_to_user(chatID, seviceName, time, date))
-        return jsonify({"status": "success", "message": f"Запись на {date} {time} принята"})
-       
+
+        # Асинхронная отправка через поток
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.run_until_complete(send_message_to_user(chat_id, service_name, time, date))
+        loop.close()
+
+        return jsonify({"status": "success"})
     except Exception as e:
+        print(f"Ошибка при записи: {e}")
         return jsonify({"status": "error", "message": str(e)}), 400
 
 if __name__ == "__main__":

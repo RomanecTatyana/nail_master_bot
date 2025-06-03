@@ -1,16 +1,27 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
-from ..constants import BTN_SERVICES,BTN_REVIEWS
+from ..constants import BTN_SERVICES,BTN_REVIEWS, BTN_REV, BTN_APPOINT
 from aiogram import  F
 from math import ceil
 
 # Создаём кнопки главной клавиатуры
 services_button = KeyboardButton(text=BTN_SERVICES)
 reviews_button = KeyboardButton(text=BTN_REVIEWS)
-
+appoint_button = KeyboardButton(text=BTN_APPOINT)
+rev_button = KeyboardButton(text=BTN_REV)
 # Клавиатура главная с двумя кнопками
 main_menu = ReplyKeyboardMarkup(
     keyboard=[
         [services_button, reviews_button]
+    ],
+    resize_keyboard=True,  # делает кнопки меньше по высоте
+    one_time_keyboard=False  # не скрывается после нажатия
+)
+
+# Клавиатура главная с тремя кнопками
+main_menu_with_cancel = ReplyKeyboardMarkup(
+    keyboard=[
+        [services_button, appoint_button],
+        [reviews_button, rev_button]
     ],
     resize_keyboard=True,  # делает кнопки меньше по высоте
     one_time_keyboard=False  # не скрывается после нажатия

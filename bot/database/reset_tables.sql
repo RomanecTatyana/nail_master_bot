@@ -32,3 +32,25 @@ ADD COLUMN stat text;
 UPDATE appointments
 SET stat = 'active'
 WHERE true;
+
+SELECT a.appointment_date::date, a.start_time, a.end_time, 
+               m.start_work_time, m.end_work_time
+        FROM appointments a
+        JOIN masters m ON a.master_id = m.id
+        WHERE EXTRACT(YEAR FROM a.appointment_date) = %s
+          AND EXTRACT(MONTH FROM a.appointment_date) = %s
+
+
+SELECT a.appointment_date::date, a.start_time, a.end_time, 
+               m.start_work_time, m.end_work_time
+        FROM appointments a
+        JOIN masters m ON a.master_id = m.id
+        WHERE EXTRACT(YEAR FROM a.appointment_date) = $1
+          AND EXTRACT(MONTH FROM a.appointment_date) = $2
+          ANd a.stat = $3
+
+
+SELECT a.id, a.service_id, a.appointment_date, a.start_time,
+                                           s.service_name
+                                    FROM appointments a
+                                    JOIN services s ON a.service_id=s.id

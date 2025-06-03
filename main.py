@@ -6,7 +6,7 @@ import asyncio
 from aiogram.filters import Command
 from pytz import timezone
 import bot.keyboards.menu as menu
-from bot.handlers import services, reviewes, start
+from bot.handlers import services, reviewes, start, appoints
 from bot.database.connection import create_pool
 
 load_dotenv()
@@ -22,7 +22,7 @@ dp = Dispatcher()
 async def fallback_handler(message: Message):
     await message.answer(
         "Я Бот і не вмію відповідати на текстові повідомлення. Ось головне меню 👇",
-        reply_markup=menu.main_menu
+        reply_markup=menu.main_menu_with_cancel
     )
     
     
@@ -31,6 +31,7 @@ async def main():
     dp.include_router(services.router)
     dp.include_router(reviewes.router)
     dp.include_router(start.router)
+    dp.include_router(appoints.router)
     dp.include_router(router) 
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)

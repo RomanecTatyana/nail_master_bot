@@ -8,9 +8,15 @@ let selectedTime = null;
 const urlParams = new URLSearchParams(window.location.search);
 const selectedDuration = parseInt(urlParams.get("duration_minutes")) || 15;
 const selectedServiceID = urlParams.get("service_id");
-const selectedServiceName = urlParams.get("service_name");
-const selectedId= urlParams.get("client_id");
-const selectedChatId= urlParams.get("chat_id");
+const selectedId = urlParams.get("client_id");
+const selectedChatId = urlParams.get("chat_id");
+
+
+
+// Проверка на отсутствие параметров
+if (!selectedServiceID || !selectedId || !selectedChatId) {
+    alert("Не всі параметри передані з Telegram. Перевір URL або оновіть додаток.");
+}
 
 
 // Получение занятых дат
@@ -29,7 +35,7 @@ function sendDataToServer() {
     fetch("/api/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ date: selectedDate, time: selectedTime, seviceI: selectedServiceID, serviceN: selectedServiceName, user: selectedId, duration:  selectedDuration, chatID:selectedChatId}),
+        body: JSON.stringify({ date: selectedDate, time: selectedTime, serviceI: selectedServiceID,  user: selectedId, duration:  selectedDuration, chatID:selectedChatId}),
     })
     .then(response => response.json())
     .then(data => {
@@ -37,17 +43,17 @@ function sendDataToServer() {
             if (window.Telegram.WebApp) {
         window.Telegram.WebApp.close();
       }
-        } else {
+        } /*else {
             alert("Ошибка: " + data.message);
         }
     })
     .catch(err => {
         alert("Ошибка отправки: " + err.message);
-    });
+    */});
 }
 // Получение свободных слотов
 function fetchFreeSlots(date) {
-    return fetch(`/api/free-slots?date=${date}&duration=${selectedDuration}&service_id=${selectedServiceID}&service_name=${selectedServiceName}`)
+    return fetch(`/api/free-slots?date=${date}&duration=${selectedDuration}&service_id=${selectedServiceID}`)
         .then(response => response.json())
         .catch(error => {
             console.error("Ошибка при получении слотов:", error);

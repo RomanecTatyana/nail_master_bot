@@ -1,14 +1,13 @@
-from aiogram import Router, F, types, Bot
-from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, WebAppInfo, WebAppData
+from aiogram import Router, F
+from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, WebAppInfo
 from aiogram.filters import Command
-import asyncpg
 from ..constants import BTN_SERVICES
 from bot.keyboards.menu import build_services_keyboard
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from bot.database.connection import get_pool
 from aiogram.fsm.context import FSMContext
-import json
 from urllib.parse import quote
+from urllib.parse import urlencode
 router = Router()
 
 # Хендлер для команды /services — показывает список услуг
@@ -79,16 +78,14 @@ async def choose_service_handler(callback: CallbackQuery, state: FSMContext):
             client_id=client_id,
             chat_id=telegram_id
         )
-
+        params = {
+            "duration_minutes": service_duration,
+            "service_id": service_id,
+            "client_id": client_id,
+            "chat_id": chat_id
+        }
         # 5. Формируем WebApp URL
-        web_app_url = (
-            f"https://1fb1-46-63-12-99.ngrok-free.app"
-            f"?duration_minutes={service_duration}"
-            f"&service_id={service_id}"
-            f"&service_name={service_name}"
-            f"&client_id={client_id}"
-            f"&chat_id={chat_id}"
-        )
+        web_app_url = (f"https://1fb1-46-63-12-99.ngrok-free.app?{urlencode(params)}")
 
         keyboard = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(
             text="🗓 Вибрати дату",
@@ -104,31 +101,3 @@ async def choose_service_handler(callback: CallbackQuery, state: FSMContext):
         print(f"[choose_service_handler] Error: {e}")
         await callback.message.answer("Сталася помилка при обробці вибраної послуги.")
 
-# # Новый хендлер для приема данных из WebApp
-# @router.message(F.WebAppData.web_app_data)
-# async def handle_webapp_data(message: Message, state: FSMContext):
-#     print("=== WebApp DATA handler triggered ===")
-#     print(f"RAW: {message}")
-#     print("📥 handle_webapp_data вызван!")
-#     print(f"📨 message.web_app_data.data = {message.web_app_data.data}")
-    
-
-#     try:
-#         raw_data = message.web_app_data.data  # строка JSON
-#         print(f"📦 Полученные данные: {raw_data}")
-
-#         data = json.loads(raw_data)  # Парсим JSON в словарь
-#         print(f"📋 Распакованные данные: {data}")
-
-#         selected_date = data.get("date")
-#         selected_time = data.get("time")
-
-#         await state.update_data(
-#             selected_date=selected_date,
-#             selected_time=selected_time
-#         )
-
-#         await message.answer(f"🗓 Вы выбрали: {selected_date} в {selected_time}")
-#     except Exception as e:
-#         print(f"[handle_webapp_data] ❌ Ошибка: {e}")
-#         await message.answer("🚫 Ошибка при обработке данных.")
