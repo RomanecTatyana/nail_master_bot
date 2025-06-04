@@ -1,7 +1,7 @@
 from aiogram import Router, F
 from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, WebAppInfo
 from aiogram.filters import Command
-from ..constants import BTN_SERVICES
+from bot.constants import BTN_SERVICES
 from bot.keyboards.menu import build_services_keyboard
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from bot.database.connection import get_pool
