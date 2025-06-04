@@ -32,12 +32,16 @@ async def reviewes_handler(message: Message):
 
             response = "ℹ️ <b>Відгуки:</b>\n\n"
             for row in rows:
-                response += f"{row['created_date']}\n"
-                response += f"<b>{row['full_name']}</b>\n"
-                response += f"{row['comment']}\n"
-                response += f"{render_stars(row['rating'])}\n\n"
-            await message.answer(response, parse_mode="HTML")
+                    response += f"{row['created_date']}\n"
+                    response += f"<b>{row['full_name']}</b>\n"
+    
+                    comment = row['comment']
+                    if comment:  # если комментарий не пустой или не None
+                        response += f"{comment}\n"
 
+                    response += f"{render_stars(row['rating'])}\n\n"
+
+            await message.answer(response, parse_mode="HTML")
     except Exception as e:
         await message.answer("🚨 Помилка при отриманні списку послуг.")
         print(f"[reviewes_handler] Error: {e}")
