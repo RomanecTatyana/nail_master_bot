@@ -54,3 +54,23 @@ SELECT a.id, a.service_id, a.appointment_date, a.start_time,
                                            s.service_name
                                     FROM appointments a
                                     JOIN services s ON a.service_id=s.id
+
+SELECT full_name, comment, rating, DATE(created_at) AS created_date 
+FROM reviews 
+JOIN clients ON reviews.client_id = clients.id 
+ORDER BY created_date 
+LIMIT 5
+
+
+SELECT a.id, a.appointment_date, a.start_time, a.service_id, a.client_id,
+                                             s.service_name,
+                                             c.full_name,
+                                             cn.note
+                                    FROM appointments a
+                                    JOIN services s ON a.service_id = s.id
+                                    JOIN clients c ON a.client_id = c.id
+                                    LEFT JOIN client_notes cn ON a.client_id = cn.client_id
+                                    WHERE a.appointment_date = $1
+                                        AND a.start_time > $2
+                                        AND a.stat = $3
+                                    ORDER BY a.start_time

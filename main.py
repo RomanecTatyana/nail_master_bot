@@ -6,7 +6,7 @@ import asyncio
 from aiogram.filters import Command
 from pytz import timezone
 import bot.keyboards.menu as menu
-from bot.handlers import services, reviewes, start, appoints, single_reviewes
+from bot.handlers import services, reviewes, start, appoints, single_reviewes, master_appoint
 from bot.database.connection import create_pool
 
 load_dotenv()
@@ -28,6 +28,7 @@ async def fallback_handler(message: Message):
     
 async def main():
     await  create_pool()
+    dp.include_router(master_appoint.router)
     dp.include_router(services.router)
     dp.include_router(reviewes.router)
     dp.include_router(start.router)

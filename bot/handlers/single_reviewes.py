@@ -6,6 +6,7 @@ from bot.database.connection import get_pool
 from bot.constants import BTN_REV
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 router = Router()
 
 @router.message(F.text == BTN_REV)
@@ -112,7 +113,7 @@ async def handle_skip_review(callback: CallbackQuery, state: FSMContext):
             
         ''', client_id, master_id, app_id, rating, now)
 
-    await callback.message.answer("✅ Дякуємо за оцінку!")
+    await callback.message.answer("✅ Дякую за оцінку!")
     await state.clear()
 
 @router.message(F.text)
@@ -142,5 +143,5 @@ async def receive_review_text(message: Message, state: FSMContext):
             
         ''', client_id, master_id, app_id, rating, review_text, now)
 
-    await message.answer("✨ Дякуємо за Ваш відгук!")
+    await message.answer("✨ Дякую за Ваш відгук!")
     await state.clear()

@@ -4,7 +4,7 @@ from aiogram.filters import Command
 import asyncpg
 import os
 from dotenv import load_dotenv
-from ..constants import BTN_REVIEWS
+from bot.constants import BTN_REVIEWS
 from aiogram import  F
 from bot.database.connection import get_pool
 
@@ -23,9 +23,8 @@ async def reviewes_handler(message: Message):
         pool = get_pool()
         async with pool.acquire() as conn:
 
-            rows = await conn.fetch("SELECT full_name, comment, rating, DATE(created_at) AS created_date FROM reviews JOIN clients ON reviews.client_id = clients.id")
+            rows = await conn.fetch("SELECT full_name, comment, rating, DATE(created_at) AS created_date FROM reviews JOIN clients ON reviews.client_id = clients.id ORDER BY created_date DESC LIMIT 5" )
        
-
             if not rows:
                 await message.answer("😔 Відгуки з'являться згодом.")
                 return
