@@ -74,3 +74,5 @@ SELECT a.id, a.appointment_date, a.start_time, a.service_id, a.client_id,
                                         AND a.start_time > $2
                                         AND a.stat = $3
                                     ORDER BY a.start_time
+
+
