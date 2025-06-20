@@ -85,7 +85,7 @@ async def choose_service_handler(callback: CallbackQuery, state: FSMContext):
             "chat_id": chat_id
         }
         # 5. Формируем WebApp URL
-        web_app_url = (f"https://1fb1-46-63-12-99.ngrok-free.app?{urlencode(params)}")
+        web_app_url = (f"https://042b-46-63-12-99.ngrok-free.app?{urlencode(params)}")
 
         keyboard = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(
             text="🗓 Вибрати дату",

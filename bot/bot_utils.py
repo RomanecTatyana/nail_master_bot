@@ -22,3 +22,6 @@ from aiogram.fsm.state import StatesGroup, State
 
 class MasterTimetableStates(StatesGroup):
     waiting_for_schedule = State()
+
+class MasterTimetableStates1(StatesGroup):
+    waiting_for_client_note = State()

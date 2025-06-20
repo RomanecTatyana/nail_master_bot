@@ -76,3 +76,12 @@ SELECT a.id, a.appointment_date, a.start_time, a.service_id, a.client_id,
                                     ORDER BY a.start_time
 
 
+SELECT DISTINCT ON (c.id) 
+    c.id, 
+    c.full_name,
+    a.appointment_date,
+    a.end_time
+FROM clients c
+JOIN appointments a ON c.id = a.client_id
+WHERE a.stat = $1
+ORDER BY c.id, a.appointment_date DESC, a.end_time DESC;
