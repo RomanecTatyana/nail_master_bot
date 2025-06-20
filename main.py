@@ -7,7 +7,8 @@ from aiogram.filters import Command
 from pytz import timezone
 import bot.keyboards.menu as menu
 from bot.handlers import services, reviewes, start, appoints, single_reviewes, master_appoint, master_timetable, master_notes
-from bot.database.connection import create_pool
+from bot.database.connection import get_pool, create_pool
+import asyncio
 
 load_dotenv()
 
@@ -25,9 +26,26 @@ async def fallback_handler(message: Message):
         reply_markup=menu.main_menu_with_cancel
     )
     
-    
+async def update_appointments_job():
+    while True:
+        print("🔄 Запуск оновлення записів...")
+        pool = get_pool()
+        async with pool.acquire() as conn:
+            await conn.execute('''
+                UPDATE appointments
+                SET stat = 'done'
+                WHERE stat = 'active'
+                  AND (appointment_date < CURRENT_DATE
+                       OR (appointment_date = CURRENT_DATE AND end_time < CURRENT_TIME))
+            ''')
+            print("✅ Оновлення завершено.")
+        
+        await asyncio.sleep(43200)  # 12 часов в секундах (12 * 60 * 60)
+        
+            
 async def main():
     await  create_pool()
+    asyncio.create_task(update_appointments_job())
     dp.include_router(master_appoint.router)
     dp.include_router(master_timetable.router)
     dp.include_router(master_notes.router)
