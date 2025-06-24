@@ -6,7 +6,7 @@ import asyncio
 from aiogram.filters import Command
 from pytz import timezone
 import bot.keyboards.menu as menu
-from bot.handlers import services, reviewes, start, appoints, single_reviewes, master_appoint, master_timetable, master_notes
+from bot.handlers import services, reviewes, start, appoints, single_reviewes, master_appoint, master_timetable, master_notes, master_bloked_time
 from bot.database.connection import get_pool, create_pool
 import asyncio
 
@@ -48,6 +48,7 @@ async def main():
     asyncio.create_task(update_appointments_job())
     dp.include_router(master_appoint.router)
     dp.include_router(master_timetable.router)
+    dp.include_router(master_bloked_time.router)
     dp.include_router(master_notes.router)
     dp.include_router(services.router)
     dp.include_router(reviewes.router)

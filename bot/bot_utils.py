@@ -25,3 +25,6 @@ class MasterTimetableStates(StatesGroup):
 
 class MasterTimetableStates1(StatesGroup):
     waiting_for_client_note = State()
+    
+class MasterBlockedTime(StatesGroup):
+    waiting_for_blocked_time = State()

@@ -22,7 +22,7 @@ mas_hand_button = KeyboardButton(text=BTN_MASTER_HAND)
 master_main_menu = ReplyKeyboardMarkup(
     keyboard=[
         [mas_hand_button],
-        [mas_appoint_button, mas_done_button, mas_notes_button],
+        [mas_appoint_button, mas_notes_button],
         [reviews_button, mas_time_button, mas_report_button],
         [mas_nowork_button]
     ],
