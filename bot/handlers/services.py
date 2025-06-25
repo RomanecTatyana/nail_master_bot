@@ -92,8 +92,9 @@ async def choose_service_handler(callback: CallbackQuery, state: FSMContext):
             "chat_id": chat_id
         }
         # 5. Формируем WebApp URL
-        RAILWAY_PUBLIC_URL = os.getenv("RAILWAY_PUBLIC_URL", "http://localhost:5000")
-        web_app_url = f"{RAILWAY_PUBLIC_URL}?{urlencode(params)}"
+       
+        web_app_url = f"https://web-production-91ee5.up.railway.app?{urlencode(params)}"
+
 
 
         keyboard = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(
