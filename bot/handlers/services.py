@@ -8,6 +8,8 @@ from bot.database.connection import get_pool
 from aiogram.fsm.context import FSMContext
 from urllib.parse import quote
 from urllib.parse import urlencode
+import os
+
 router = Router()
 
 # Хендлер для команды /services — показывает список услуг
@@ -90,7 +92,9 @@ async def choose_service_handler(callback: CallbackQuery, state: FSMContext):
             "chat_id": chat_id
         }
         # 5. Формируем WebApp URL
-        web_app_url = (f"https://042b-46-63-12-99.ngrok-free.app?{urlencode(params)}")
+        RAILWAY_PUBLIC_URL = os.getenv("RAILWAY_PUBLIC_URL", "http://localhost:5000")
+        web_app_url = f"{RAILWAY_PUBLIC_URL}?{urlencode(params)}"
+
 
         keyboard = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(
             text="🗓 Вибрати дату",
