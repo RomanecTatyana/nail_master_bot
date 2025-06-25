@@ -1,7 +1,7 @@
 from aiogram import Router, F
 from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, WebAppInfo
 from aiogram.filters import Command
-from bot.constants import BTN_SERVICES
+from bot.constants import BTN_SERVICES, BTN_MASTER_HAND
 from bot.keyboards.menu import build_services_keyboard
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from bot.database.connection import get_pool
@@ -47,6 +47,11 @@ async def services_handler(message: Message):
 
 # Хендлер на кнопку с текстом услуг
 @router.message(F.text == BTN_SERVICES)
+async def services_button_handler(message: Message):
+    await services_handler(message)
+    
+# Хендлер на кнопку с текстом услуг
+@router.message(F.text == BTN_MASTER_HAND)
 async def services_button_handler(message: Message):
     await services_handler(message)
 

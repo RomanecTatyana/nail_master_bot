@@ -23,7 +23,7 @@ master_main_menu = ReplyKeyboardMarkup(
     keyboard=[
         [mas_hand_button],
         [mas_appoint_button, mas_notes_button],
-        [reviews_button, mas_time_button, mas_report_button],
+        [reviews_button, mas_time_button],
         [mas_nowork_button]
     ],
     resize_keyboard=True,  # делает кнопки меньше по высоте

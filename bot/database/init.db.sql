@@ -40,7 +40,8 @@ CREATE TABLE IF NOT EXISTS appointments (
     master_id INTEGER NOT NULL REFERENCES masters(id),
     appointment_date DATE NOT NULL,
     start_time TIME NOT NULL,
-    end_time TIME NOT NULL
+    end_time TIME NOT NULL,
+    stat TEXT
 );
 
 -- Таблиця з відгуками клієнтів

@@ -7,7 +7,7 @@ BTN_REV = "👍 Залишити відгук"
 
 BTN_MASTER_APPOINT = "📅 Записи"
 BTN_MASTER_TIME = "🕓 Розклад"
-BTN_MASTER_NO_WORK = "❌ Не хочу працювати н"
+BTN_MASTER_NO_WORK = "❌ Не хочу працювати"
 BTN_DONE = "✅ Виконання н"
 BTN_NOTES = "📝 Примітки"
 BTN_REPORT = "📋 Звіт н"

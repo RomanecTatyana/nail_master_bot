@@ -151,7 +151,19 @@ def free_slots():
             busy_start = datetime.combine(date_obj, start)
             busy_end = datetime.combine(date_obj, end)
             busy_intervals.append((busy_start, busy_end))
+        # Получаем все блокированные интервалы
+        cur.execute("""
+            SELECT start_time, end_time
+            FROM blocked_time
+            WHERE blocked_date = %s
+        """, (date_obj,))
 
+        blocked_intervals = cur.fetchall()
+
+        for start, end in blocked_intervals:
+            blocked_start = datetime.combine(date_obj, start)
+            blocked_end = datetime.combine(date_obj, end)
+            busy_intervals.append((blocked_start, blocked_end))
         # Настройки интервала
         interval = timedelta(minutes=15)
         duration_delta = timedelta(minutes=duration)
@@ -181,6 +193,7 @@ def free_slots():
         return jsonify(available_slots)
 
     except Exception as e:
+        print(f"[free_slots] Ошибка: {e}")  # Вывод в консоль
         return jsonify({"error": str(e)}), 500
 
 
