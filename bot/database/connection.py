@@ -16,7 +16,8 @@ async def create_pool():
             password=os.getenv("DB_PASSWORD"),
             database=os.getenv("DB_NAME"),
             host=os.getenv("DB_HOST"),
-            port=os.getenv("DB_PORT")
+            port=os.getenv("DB_PORT"),
+            ssl='require'
         )
 
 def get_pool():
