@@ -20,12 +20,10 @@ if (!selectedServiceID || !selectedId || !selectedChatId) {
 
 
 // Получение занятых дат
-function fetchBusyDates(year, month) {
-    return fetch(`/api/busy-days?year=${year}&month=${month + 1}&duration=${selectedDuration}`)
-        .then(response => response.json())
-        .then(data => {
-            busyDates = data;
-        });
+async function fetchBusyDates(year, month) {
+    const response = await fetch(`/api/busy-days?year=${year}&month=${month + 1}&duration=${selectedDuration}`);
+    const data = await response.json();
+    busyDates = data;
 }
 
 // Отправка данных на сервер
