@@ -101,6 +101,7 @@ def busy_days():
         return jsonify([])
 
     busy = get_busy_dates(year, month, duration)
+    print(busy)
     return jsonify(busy)
 
 
