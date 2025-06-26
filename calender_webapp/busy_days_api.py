@@ -48,8 +48,7 @@ def get_busy_dates(year, month, duration_minutes):
         JOIN masters m ON a.master_id = m.id
         WHERE EXTRACT(YEAR FROM a.appointment_date) = %s
           AND EXTRACT(MONTH FROM a.appointment_date) = %s
-          AND a.stat = %s
-    """, (year, month, "active"))
+    """, (year, month))
 
     schedule_by_date = defaultdict(list)
     work_hours_by_date = {}
@@ -91,7 +90,6 @@ def get_busy_dates(year, month, duration_minutes):
             busy_days.append(day.isoformat())
 
     return busy_days
-
 
 @app.route("/api/busy-days")
 def busy_days():
